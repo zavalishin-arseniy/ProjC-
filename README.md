@@ -1,5 +1,5 @@
-Цитата:"Сборка cmake, автоматические тесты, кроссплатформенность.
-И зачёт ваш."
+Сборка cmake, автоматические тесты, кроссплатформенность.
+И зачёт ваш. check, check,check,?
 
 
 1. Что не так в этой строчке? double scal(vector<double> a, vector<double> b)   //double scal(const vector<double> &a, const vector<double> &b)? 
