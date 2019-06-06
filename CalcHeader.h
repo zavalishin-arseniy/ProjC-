@@ -9,7 +9,6 @@ namespace mcal
 
 	double Determinant(std::vector<std::vector<double>> A);
 
-
 	std::vector<std::vector<double>> Minor(std::vector<std::vector<double>> A);
 
 	std::vector<std::vector<double>> Transpose(std::vector<std::vector<double>> A);

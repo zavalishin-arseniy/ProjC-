@@ -5,7 +5,7 @@ namespace mcal
 {
 	int Gauss(std::vector < std::vector<double> > a, std::vector<double>& ans)
 	{
-		const double EPS = 0.5;
+		const double EPS = 1e-9;
 		const int INF = 1e9;
 		int n = (int)a.size();
 		int m = (int)a[0].size() - 1;
@@ -89,38 +89,42 @@ namespace mcal
 
 	double Determinant(std::vector<std::vector<double>> A)
 	{
+		const double EPS = 1e-9;
+		const int INF = 1e9;
+		int swp = 0;
 		int n = (int)A.size();
-		if (n > 1)
+		for (int col = 0, row = 0; col < n && row < n; ++col)
 		{
-			std::vector<std::vector<double>> a;
-			std::vector<double> tmptmp;
-			tmptmp.assign(n, 0);
-			a.assign(n, tmptmp);
-			std::vector<std::vector<double>> c;
-			tmptmp.assign(n - 1, 0);
-			c.assign(n - 1, tmptmp);
-			double b = 0;
-			for (int i = 0; i < n; i++)
-				for (int j = 0; j < n; j++)
-					a[i][j] = A[i][j];
-
-
-			for (int i = 0; i < n; i++)
+			int sel = row;
+			for (int i = row; i < n; ++i)
+				if (abs(A[i][col]) > abs(A[sel][col]))
+					sel = i;
+			if (abs(A[sel][col]) < EPS)
+				continue;
+			for (int i = col; i < n; ++i)
 			{
-				for (int y = 0; y < n - 1; y++)
-					for (int j = 0; j < n - 1; j++)
-						if (j < i)
-							c[y][j] = A[y + 1][j];
-						else
-							c[y][j] = A[y + 1][j + 1];
-
-
-				if (i % 2 == 0) b += a[0][i] * Determinant(c);
-				else b -= a[0][i] * Determinant(c);
+				std::swap(A[sel][i], A[row][i]);
+				++swp;
 			}
-			return b;
+			for (int i = 0; i < n; ++i)
+				if (i != row) {
+					double c = A[i][col] / A[row][col];
+					for (int j = col; j < n; ++j)
+						A[i][j] -= A[row][j] * c;
+				}
+			++row;
 		}
-		else return A[0][0];
+		double det = 1;
+		for (int i = 0; i < n; ++i)
+			if (A[i][i] > EPS)
+				det *= A[i][i];
+			else
+				det *= 0;
+		if (swp % 2)
+			swp = -1;
+		else
+			swp = 1;
+		return det * swp;
 	}
 
 	std::vector<std::vector<double>> Minor(std::vector<std::vector<double>> A)
