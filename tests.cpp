@@ -150,14 +150,23 @@ void test_multiV()
 void tests()
 {
 	test_cond();
-	test_gauss();
+	cout << 1;
+	//test_gauss();
+	cout << 2;
 	test_eigenvalues();
+	cout << 3;
 	test_det();
+	cout << 4;
 	test_minor();
+	cout << 5;
 	test_trans();
+	cout << 6;
 	test_inver();
+	cout << 7;
 	test_norm();
+	cout << 8;
 	test_multi();
+	cout << 9;
 	test_multiV();
 }
 //####################################################################################
