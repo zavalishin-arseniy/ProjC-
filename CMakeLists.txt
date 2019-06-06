@@ -1,9 +1,23 @@
-п»ї# CMakeList.txt: РїСЂРѕРµРєС‚ CMake РґР»СЏ C++Test; РІРєР»СЋС‡РёС‚Рµ РёСЃС…РѕРґРЅС‹Р№ РєРѕРґ Рё РѕРїСЂРµРґРµР»РµРЅРёСЏ,
-# СѓРєР°Р¶РёС‚Рµ Р·РґРµСЃСЊ Р»РѕРіРёРєСѓ РґР»СЏ РєРѕРЅРєСЂРµС‚РЅРѕРіРѕ РїСЂРѕРµРєС‚Р°.
+# CMakeList.txt: проект CMake для C++Test; включите исходный код и определения,
+# укажите здесь логику для конкретного проекта.
 #
-cmake_minimum_required (VERSION 3.8)
+#cmake_minimum_required (VERSION 3.8)
 
-# Р”РѕР±Р°РІСЊС‚Рµ РёСЃС‚РѕС‡РЅРёРє РІ РёСЃРїРѕР»РЅСЏРµРјС‹Р№ С„Р°Р№Р» СЌС‚РѕРіРѕ РїСЂРѕРµРєС‚Р°.
-add_executable (C++Test "C++Test.cpp" )
+# Добавьте источник в исполняемый файл этого проекта.
+#add_executable (C++Test "C++Test.cpp" )
 
-# TODO: Р”РѕР±Р°РІСЊС‚Рµ С‚РµСЃС‚С‹ Рё С†РµР»РµРІС‹Рµ РѕР±СЉРµРєС‚С‹, РµСЃР»Рё СЌС‚Рѕ РЅРµРѕР±С…РѕРґРёРјРѕ.
+# TODO: Добавьте тесты и целевые объекты, если это необходимо.
+
+
+cmake_minimum_required(VERSION 2.8)
+project(ProjC-)
+
+set(SOURCE_EXE main.cpp)
+
+set(SOURCE_LIB CalcSourse.cpp)
+
+add_library(lib STATIC ${SOURCE_LIB})
+
+add_executable(main ${SOURCE_EXE})
+
+target_link_libraries(main lib)
