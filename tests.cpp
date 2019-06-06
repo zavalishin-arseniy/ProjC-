@@ -334,240 +334,152 @@ void writeM(vector<vector<double>> a)
 }
 
 
-bool exitflag = false;
-int user;
-int n;
-vector<double> str;
-vector<vector<double>> matr, matr1, matrans;
-vector<double> vec, vec1;
-double doub;
+//tests
+//####################################################################################
+const double eps = 0.5;
+void eps_assert(const double &ans, double &expected)
+{
+	assert(ans > expected - eps && ans < expected + eps);
+}
+void vec_assert(const vector<double> &ans, vector<double> &expected)
+{
+	assert(ans.size() == expected.size());
+	for (int i = 0; i < ans.size(); ++i)
+		eps_assert(ans[i], expected[i]);
+}
+void matrix_assert(const vector<vector<double>> &ans, vector<vector<double>> &expected)
+{
+	assert(ans.size() == expected.size());
+	for (int i = 0; i < ans.size(); ++i)
+		vec_assert(ans[i], expected[i]);
+}
+void test_cond()
+{
+	vector<vector<double>> M;
+	double expected;
+	M = { {1,2,3},{4,5,6},{7,8,8} };
+	expected = 121.531;
+	eps_assert(cond(M), expected);
+}
+void test_gauss()
+{
+	vector<vector<double>> M;
+	vector<double> expected;
+	M = { {1,2,3},{4,5,6} };
+	expected = { -1, 2 };
+	vec_assert(Gauss(M), expected);
+	vec_assert(MainElem(M), expected);
+}
+void test_eigenvalues()
+{
+	vector<vector<double>> M;
+	double expected;
+	//1
+	M = { {1,2,3},{4,5,6},{7,8,9} };
+	expected = 16.1;
+	eps_assert(Scal(M), expected);
+	eps_assert(Sim(M), expected);
+	//2
+	M = { {1} };
+	expected = 1.0;
+	eps_assert(Scal(M), expected);
+	eps_assert(Sim(M), expected);
+}
+void test_det()
+{
+	vector<vector<double>> M;
+	double expected;
+	//1
+	M = { {1,2,3},{4,5,6},{7,8,9} };
+	expected = 0;
+	eps_assert(Determinant(M), expected);
+	//2
+	M = { {1} };
+	expected = 1;
+	eps_assert(Determinant(M), expected);
+}
+void test_minor()
+{
+	vector<vector<double>> M;
+	vector<vector<double>> expected;
+	//1
+	M = { {1,2},{3,4} };
+	expected = { {4,-3},{-2,1} };
+	matrix_assert(Minor(M), expected);
+	//2
+	M = { {1} };
+	expected = { {0} };
+	matrix_assert(Minor(M), expected);
+}
+void test_trans()
+{
+	vector<vector<double>> M;
+	vector<vector<double>> expected;
+	//1
+	M = { {1,2},{3,4} };
+	expected = { {1,3},{2,4} };
+	matrix_assert(Transpose(M), expected);
+	//2
+	M = { {1} };
+	expected = { {1} };
+	matrix_assert(Transpose(M), expected);
+}
+void test_inver()
+{
+	vector<vector<double>> M;
+	vector<vector<double>> expected;
+	M = { {1, 2},{3,4} };
+	expected = { {-2, 1},{1.5, -0.5} };
+	matrix_assert(Invertible(M), expected);
+}
+void test_norm()
+{
+	vector<vector<double>> M;
+	double expected;
+	M = { {1, 2},{3,4} };
+	expected = 5.47723;
+	eps_assert(Norm(M), expected);
+}
+void test_multi()
+{
+	vector<vector<double>> M;
+	vector<vector<double>> M1;
+	M = { {1, 2}, {3, 4} };
+	M1 = { {6, 3}, {2, 8} };
+	vector<vector<double>> expected;
+	expected = { {10, 19}, {26, 41} };
+	matrix_assert(multi(M, M1), expected);
+}
+void test_multiV()
+{
+	vector<vector<double>> M;
+	vector<double> v;
+	M = { {1, 2}, {3, 4} };
+	v = { 9, 2 };
+	vector<double> expected;
+	expected = { 13, 35 };
+	vec_assert(multiV(M, v), expected);
+}
+
+
+void tests()
+{
+	test_cond();
+	test_gauss();
+	test_eigenvalues();
+	test_det();
+	test_minor();
+	test_trans();
+	test_inver();
+	test_norm();
+	test_multi();
+	test_multiV();
+}
+//####################################################################################
 
 int main()
 {
-	cout << "Matrix calc v 3.6.4" << endl;
-	while (!exitflag)
-	{
-		cout << "__________________" << endl;
-		cout << "1. Condition number" << endl;
-		cout << "2. Gauss method" << endl;
-		cout << "3. Main element method" << endl;
-
-		cout << "4. Power method" << endl;
-		cout << "5. Scalar product method" << endl;
-
-		cout << "6. Determinant" << endl;
-		cout << "7. Minor" << endl;
-
-		cout << "8. Transposition" << endl;
-		cout << "9. Invertible matrix" << endl;
-
-		cout << "10. Matrix norm" << endl;
-
-		cout << "11. Matrix multiplication" << endl;
-		cout << "12. Matrix and vector multilication" << endl;
-
-		cout << "13. Exit" << endl;
-		cout << "__________________" << endl;
-		int x; matr.clear();
-		cin >> user;
-		switch (user)
-		{
-		case 1:
-			cin >> n;
-			for (int i = 0; i < n; ++i)
-			{
-				str.assign(n, 0);
-				for (int j = 0; j < n; ++j)
-					cin >> str[j];
-				matr.push_back(str);
-			}
-			doub = cond(matr);
-			cout << endl;
-			cout << doub;
-			cout << endl;
-			break;
-
-		case 2:
-			cin >> n;
-			for (int i = 0; i < n; ++i)
-			{
-				str.assign(n + 1, 0);
-				for (int j = 0; j < n + 1; ++j)
-					cin >> str[j];
-				matr.push_back(str);
-			}
-			vec = Gauss(matr);
-			cout << endl;
-			for (auto i : vec)
-				cout << i << ' ';
-			cout << endl;
-			break;
-
-		case 3:
-			cin >> n;
-			for (int i = 0; i < n; ++i)
-			{
-				str.assign(n + 1, 0);
-				for (int j = 0; j < n + 1; ++j)
-					cin >> str[j];
-				matr.push_back(str);
-			}
-			vec = MainElem(matr);
-			cout << endl;
-			for (auto i : vec)
-				cout << i << ' ';
-			cout << endl;
-			break;
-
-		case 4:
-			cin >> n;
-			for (int i = 0; i < n; ++i)
-			{
-				str.assign(n, 0);
-				for (int j = 0; j < n; ++j)
-					cin >> str[j];
-				matr.push_back(str);
-			}
-			doub = Sim(matr);
-			cout << endl;
-			cout << doub;
-			cout << endl;
-			break;
-		case 5:
-			cin >> n;
-			for (int i = 0; i < n; ++i)
-			{
-				str.assign(n, 0);
-				for (int j = 0; j < n; ++j)
-					cin >> str[j];
-				matr.push_back(str);
-			}
-			doub = Scal(matr);
-			cout << endl;
-			cout << doub;
-			cout << endl;
-			break;
-
-		case 6:
-			cin >> n;
-			for (int i = 0; i < n; ++i)
-			{
-				str.assign(n, 0);
-				for (int j = 0; j < n; ++j)
-					cin >> str[j];
-				matr.push_back(str);
-			}
-			doub = Determinant(matr);
-			cout << endl;
-			cout << doub;
-			cout << endl;
-			break;
-
-		case 7:
-			cin >> n;
-			for (int i = 0; i < n; ++i)
-			{
-				str.assign(n, 0);
-				for (int j = 0; j < n; ++j)
-					cin >> str[j];
-				matr.push_back(str);
-			}
-			matrans = Minor(matr);
-			cout << endl;
-			writeM(matrans);
-			break;
-
-		case 8:
-			cin >> n;
-			for (int i = 0; i < n; ++i)
-			{
-				str.assign(n, 0);
-				for (int j = 0; j < n; ++j)
-					cin >> str[j];
-				matr.push_back(str);
-			}
-			matrans = Transpose(matr);
-			cout << endl;
-			writeM(matrans);
-			break;
-
-		case 9:
-			cin >> n;
-			for (int i = 0; i < n; ++i)
-			{
-				str.assign(n, 0);
-				for (int j = 0; j < n; ++j)
-					cin >> str[j];
-				matr.push_back(str);
-			}
-			matrans = Invertible(matr);
-			cout << endl;
-			writeM(matrans);
-			break;
-
-		case 10:
-			cin >> n;
-			for (int i = 0; i < n; ++i)
-			{
-				str.assign(n, 0);
-				for (int j = 0; j < n; ++j)
-					cin >> str[j];
-				matr.push_back(str);
-			}
-			doub = Norm(matr);
-			cout << endl;
-			cout << doub;
-			cout << endl;
-			break;
-
-		case 11:
-			cin >> n;
-			for (int i = 0; i < n; ++i)
-			{
-				str.assign(n, 0);
-				for (int j = 0; j < n; ++j)
-					cin >> str[j];
-				matr.push_back(str);
-			}
-			for (int i = 0; i < n; ++i)
-			{
-				str.assign(n, 0);
-				for (int j = 0; j < n; ++j)
-					cin >> str[j];
-				matrans.push_back(str);
-			}
-
-			matrans = multi(matr, matrans);
-			cout << endl;
-			writeM(matrans);
-			break;
-
-		case 12:
-			cin >> n;
-			for (int i = 0; i < n; ++i)
-			{
-				str.assign(n, 0);
-				for (int j = 0; j < n; ++j)
-					cin >> str[j];
-				matr.push_back(str);
-			}
-			str.assign(n, 0);
-			for (int i = 0; i < n; ++i)
-				cin >> str[i];
-			vec = multiV(matr, str);
-			cout << endl;
-			for (auto i : vec)
-				cout << i << ' ';
-			cout << endl;
-			break;
-
-		case 13:
-			exitflag = true;
-			break;
-
-		default:
-			cout << "enter valid data" << endl;
-			break;
-		}
-	}
+	//cout << "Matrix calc v 2.6.4" << endl;
+	tests();
+	cout << "tests completed"<<endl;
 }
