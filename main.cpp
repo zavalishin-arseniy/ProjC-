@@ -4,7 +4,7 @@
 #include<cmath>
 #include<cassert>
 #include<cstring>
-#include"CalcHeader.h"
+#include"calc.h"
 using namespace std;
 using namespace mcal;
 

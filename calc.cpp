@@ -1,6 +1,7 @@
 #include <vector>
 #include<iostream>
-#include"CalcHeader.h"
+#include<cmath>
+#include"calc.h"
 namespace mcal
 {
 	int Gauss(std::vector < std::vector<double> > a, std::vector<double>& ans)
