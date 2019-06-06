@@ -70,7 +70,7 @@ int main()
 					cin >> str[j];
 				matr.push_back(str);
 			}
-			vec = Gauss(matr);
+			cout << Gauss(matr, vec);
 			cout << endl;
 			for (auto i : vec)
 				cout << i << ' ';

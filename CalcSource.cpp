@@ -3,43 +3,47 @@
 #include"CalcHeader.h"
 namespace mcal
 {
-	std::vector<double> Gauss(std::vector<std::vector<double>> A)
+	int Gauss(std::vector < std::vector<double> > a, std::vector<double>& ans)
 	{
-		int n = (int)A.size();
-		std::vector<std::vector<double>> a;
-		std::vector<double> tmptmp;
-		tmptmp.assign(n + 1, 0);
-		a.assign(n, tmptmp);
-		std::vector<double> b;
-		b.assign(n, 0);
-		for (int i = 0; i < n; i++)
-			for (int j = 0; j < n + 1; j++)
-				a[i][j] = A[i][j];
+		const double EPS = 0.5;
+		const int INF = 1e9;
+		int n = (int)a.size();
+		int m = (int)a[0].size() - 1;
+		std::vector<int> where(m, -1);
+		for (int col = 0, row = 0; col < m && row < n; ++col) {
+			int sel = row;
+			for (int i = row; i < n; ++i)
+				if (abs(a[i][col]) > abs(a[sel][col]))
+					sel = i;
+			if (abs(a[sel][col]) < EPS)
+				continue;
+			for (int i = col; i <= m; ++i)
+				std::swap(a[sel][i], a[row][i]);
+			where[col] = row;
 
-		for (int i = 0; i < n; i++)
-			for (int j = i + 1; j < n; j++)
-				for (int y = i; y < n + 1; y++)
-					a[j][y] = a[j][y] - A[j][i] * a[i][y] / A[i][i];
-
-		for (int i = n - 1; i >= 0; i--)
-			for (int j = i - 1; j >= 0; j--)
-				for (int y = i + 1; y >= 0; y--)
-					a[j][y] = a[j][y] - a[j][i] * a[i][y] / a[i][i];
-
-		for (int i = 0; i < n; i++)
-		{
-			a[i][n] = a[i][n] / a[i][i];
-			a[i][i] = a[i][i] / a[i][i];
-			b[i] = a[i][n];
+			for (int i = 0; i < n; ++i)
+				if (i != row) {
+					double c = a[i][col] / a[row][col];
+					for (int j = col; j <= m; ++j)
+						a[i][j] -= a[row][j] * c;
+				}
+			++row;
 		}
-		/*for (auto i : a)
-		{
-			for (auto j : i)
-				cout << j << ' ';
-			cout << endl;
-		}*/
-
-		return b;
+		ans.assign(m, 0);
+		for (int i = 0; i < m; ++i)
+			if (where[i] != -1)
+				ans[i] = a[where[i]][m] / a[where[i]][i];
+		for (int i = 0; i < n; ++i) {
+			double sum = 0;
+			for (int j = 0; j < m; ++j)
+				sum += ans[j] * a[i][j];
+			if (abs(sum - a[i][m]) > EPS)
+				return 0;
+		}
+		for (int i = 0; i < m; ++i)
+			if (where[i] == -1)
+				return INF;
+		return 1;
 	}
 
 	std::vector<double> MainElem(std::vector<std::vector<double>> A)
@@ -73,7 +77,7 @@ namespace mcal
 						a[i][y] = a[j][y];
 						a[j][y] = tmp;
 					}
-		b = Gauss(a);
+		Gauss(a,b);
 		for (int i = 0; i < n; i++)
 		{
 			tmp = b[i];

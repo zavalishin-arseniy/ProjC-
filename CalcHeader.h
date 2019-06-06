@@ -3,7 +3,7 @@
 namespace mcal
 {
 
-	std::vector<double> Gauss(std::vector<std::vector<double>> A);
+	int Gauss(std::vector<std::vector<double>> a, std::vector<double> &ans);
 
 	std::vector<double> MainElem(std::vector<std::vector<double>> A);
 
