@@ -5,7 +5,7 @@
 #include<cassert>
 #include<cstring>
 #include"CalcHeader.h"
-using namespace mcal
+using namespace mcal;
 using namespace std;
 
 
@@ -40,17 +40,20 @@ void test_cond()
 void test_gauss()
 {
 	vector<vector<double>> M;
-	vector<double> expected;
-	vector<double> ans;
-	M1 = {{1,2,3},{4,5,6}};
-	M0 = {{1,2,0},{2,4,0}};
-	double expected_g1 = 1;
-	double expected_g0 = 1e9;
+	double expected;
+	vector<double> ans, expected_m;
+	//1
+	M = { {1,2,3},{4,5,6} };
+	expected = 1;
 	expected_m = { -1, 2 };
-	eps_assert(Gauss(M1, ans), expected_g1);
-	ans.clear();
-	eps_assert(Gauss(M0, ans), expected_g0);
+	eps_assert(Gauss(M, ans), expected);
+	vec_assert(ans, expected_m);
+	//2
 	vec_assert(MainElem(M), expected_m);
+	//3
+	M = { {1,2,0},{2,4,0} };
+	expected = 1e9;
+	eps_assert(Gauss(M, ans), expected);
 }
 void test_eigenvalues()
 {
